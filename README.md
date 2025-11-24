@@ -81,6 +81,20 @@ Your data, your control:
 
 ---
 
+## 🎬 Demo Video
+
+<div align="center">
+  
+  <a href="https://youtu.be/dk2saWEYXbM">
+    <img src="https://img.youtube.com/vi/dk2saWEYXbM/maxresdefault.jpg" alt="CFanatic Demo Video" width="700">
+  </a>
+  
+  <p><i>👆 Click to watch CFanatic in action - AI-powered Codeforces analysis</i></p>
+
+</div>
+
+---
+
 ## 🖼️ Screenshots
 
 <div align="center">
