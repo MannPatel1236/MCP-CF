@@ -20,7 +20,6 @@ export const Navbar: React.FC = () => {
         <div className="flex items-center gap-4">
           <div className="hidden md:flex items-center gap-2 text-stone-400">
             <a href="#" className="p-2 hover:text-white transition-colors"><Github size={20} /></a>
-            <a href="#" className="p-2 hover:text-white transition-colors"><Twitter size={20} /></a>
           </div>
           
           <Link to="/chat">

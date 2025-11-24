@@ -6,6 +6,7 @@ import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../config';
 
 export const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -24,7 +25,7 @@ export const Auth: React.FC = () => {
       : { username, email, password };
 
     try {
-      const response = await fetch(`http://localhost:8000${endpoint}`, {
+      const response = await fetch(`${API_BASE_URL}${endpoint}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),

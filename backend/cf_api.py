@@ -84,14 +84,59 @@ class CodeforcesAPI:
             "showUnofficial": str(show_unofficial).lower()
         })
 
-    async def get_problems(self, tags: str = None):
+    async def get_problems(self, tags: str = None, limit_kb: int = 500, start_index: int = 0):
         """
         Returns all problems from problemset. Problems can be filtered by tags.
+        Results are paginated by size (limit_kb) to avoid large payloads.
         """
         params = {}
         if tags:
             params["tags"] = tags
-        return await self._make_request("problemset.problems", params)
+        
+        # Fetch all data since API doesn't support pagination for this endpoint
+        full_data = await self._make_request("problemset.problems", params)
+        
+        problems = full_data.get("problems", [])
+        statistics = full_data.get("problemStatistics", [])
+        
+        if start_index >= len(problems):
+             return {
+                 "problems": [], 
+                 "problemStatistics": [], 
+                 "next_start_index": None, 
+                 "total_problems": len(problems)
+             }
+
+        current_size = 0
+        limit_bytes = limit_kb * 1024
+        
+        sliced_problems = []
+        sliced_stats = []
+        
+        next_index = None
+        
+        for i in range(start_index, len(problems)):
+            prob = problems[i]
+            # Ensure statistics align (assuming same order and length, which is standard for this API)
+            stat = statistics[i] if i < len(statistics) else {}
+            
+            # Estimate size
+            item_size = len(str(prob)) + len(str(stat))
+            
+            if current_size + item_size > limit_bytes and len(sliced_problems) > 0:
+                next_index = i
+                break
+            
+            sliced_problems.append(prob)
+            sliced_stats.append(stat)
+            current_size += item_size
+            
+        return {
+            "problems": sliced_problems,
+            "problemStatistics": sliced_stats,
+            "next_start_index": next_index,
+            "total_problems": len(problems)
+        }
 
     async def get_user_blog_entries(self, handle: str):
         """

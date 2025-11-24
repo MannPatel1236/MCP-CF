@@ -8,9 +8,11 @@ from sqlalchemy.orm import Session
 from database import get_db
 import models
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Secret key for JWT (should be in env vars in production)
-SECRET_KEY = "supersecretkeyforhackathon"
+SECRET_KEY =os.getenv("SECRET_KEY")            
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

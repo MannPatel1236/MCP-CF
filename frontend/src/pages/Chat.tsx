@@ -40,10 +40,10 @@ export const Chat: React.FC = () => {
     checkKeys();
     loadSessions();
     
-    // Auto-refresh sessions every 5 minutes
+    // Auto-refresh sessions every 15 minutes
     const intervalId = setInterval(() => {
       loadSessions();
-    }, 300000);
+    }, 900000);
     
     return () => clearInterval(intervalId);
   }, []);
@@ -211,11 +211,9 @@ export const Chat: React.FC = () => {
       const data = await res.json();
       if (res.ok) {
         setMessages(prev => [...prev, { role: 'model', content: data.response }]);
-        // Update current session ID if this was a new chat
         if (!currentSessionId && data.session_id) {
           setCurrentSessionId(data.session_id);
         }
-        // Reload sessions to update the list
         loadSessions();
       } else {
         const errorMessage = data.detail || 'Error getting response';
@@ -233,13 +231,11 @@ export const Chat: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-stone-950 overflow-hidden relative">
-      {/* Background Ambient Light */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] bg-orange-600/5 rounded-full blur-[150px]" />
         <div className="absolute bottom-[-20%] left-[-10%] w-[500px] h-[500px] bg-blue-600/5 rounded-full blur-[150px]" />
       </div>
 
-      {/* Sidebar */}
       <motion.div 
         initial={false}
         animate={{ width: showSidebar ? 320 : 0, opacity: showSidebar ? 1 : 0 }}
@@ -247,7 +243,10 @@ export const Chat: React.FC = () => {
       >
         <div className="p-4 border-b border-white/5 flex justify-between items-center min-w-[320px]">
           <h2 className="font-bold text-lg font-display flex items-center gap-2">
-            <Bot href="/" className="text-orange-500" /> History
+            <button onClick={() => navigate('/')} className="hover:scale-110 transition-transform cursor-pointer">
+              <Bot className="text-orange-500" />
+            </button>
+            History
           </h2>
           <Button variant="ghost" onClick={() => setShowSidebar(false)} className="p-2 hover:bg-white/5 rounded-lg">
             <X size={20} />
@@ -487,7 +486,7 @@ export const Chat: React.FC = () => {
                     value={geminiKey}
                     onChange={(e) => setGeminiKey(e.target.value)}
                     type="password"
-                    placeholder="AIza..."
+                    placeholder="ABC..."
                     className="bg-stone-900/50"
                   />
                   <Input 
@@ -495,7 +494,7 @@ export const Chat: React.FC = () => {
                     value={cfHandle}
                     onChange={(e) => setCfHandle(e.target.value)}
                     type="text"
-                    placeholder="tourist"
+                    placeholder="touri.."
                     className="bg-stone-900/50"
                   />
                 </div>

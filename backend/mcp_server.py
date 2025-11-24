@@ -60,10 +60,20 @@ async def get_contest_standings(contest_id: int, count: int = 5):
         return f"Error fetching standings: {e}"
 
 @tool
-async def get_problems(tags: str = None):
-    """Get problems from the problemset, optionally filtered by tags (semicolon-separated)."""
+async def get_problems(tags: str = None, limit_kb: int = 500, start_index: int = 0):
+    """Get problems from the problemset, optionally filtered by tags.
+    
+    Args:
+        tags: Semicolon-separated tags (e.g. 'dp;greedy').
+        limit_kb: Approximate size limit in KB for the response (default 500).
+        start_index: Index to start fetching from (for pagination).
+    
+    Returns:
+        A dictionary containing 'problems', 'problemStatistics', and 'next_start_index'.
+        If 'next_start_index' is present, use it as 'start_index' in the next call to get more data.
+    """
     try:
-        return await cf_api.get_problems(tags)
+        return await cf_api.get_problems(tags, limit_kb, start_index)
     except Exception as e:
         return f"Error fetching problems: {e}"
 
