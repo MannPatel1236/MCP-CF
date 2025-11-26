@@ -1,0 +1,36 @@
+name: Sync with upstream
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # Runs every 6 hours
+  workflow_dispatch:        # Allows manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+
+      - name: Add upstream
+        run: |
+          git remote add upstream git@github.com:AstralKS/MCP-CF.git
+          git fetch upstream
+
+      - name: Merge upstream changes
+        run: |
+          git merge upstream/main --no-edit || true
+          # If the original repo uses master instead of main:
+          # git merge upstream/master --no-edit || true
+
+      - name: Push changes
+        run: |
+          git push origin HEAD || true
